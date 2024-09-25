@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import { AuthContext } from './context/AuthContext';
 
-function App() {
+const App: React.FC = () => {
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    return <div>Loading...</div>;
+  }
+
+  const { currentUser } = authContext;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route 
+          path="/login" 
+          element={!currentUser ? <Login /> : <Navigate to="/dashboard" />} 
+        />
+        <Route 
+          path="/dashboard" 
+          element={currentUser ? <Dashboard /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="*" 
+          element={<Navigate to={currentUser ? "/dashboard" : "/login"} />} 
+        />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
