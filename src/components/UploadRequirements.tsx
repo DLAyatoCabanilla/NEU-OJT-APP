@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { storage } from '../firebase'; // Ensure firebase is set up for storage
+import { storage } from '../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Button, Input, LinearProgress, Typography } from '@mui/material';
 
