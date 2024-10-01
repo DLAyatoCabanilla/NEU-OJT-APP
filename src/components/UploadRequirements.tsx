@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { storage } from '../firebase';
+import { storage } from '../firebase'; //Bakit hindi kita mapagana????
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Button, Input, LinearProgress, Typography } from '@mui/material';
 
