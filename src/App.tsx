@@ -1,8 +1,14 @@
-import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import Dashboard from './components/Dashboard';
-import { AuthContext } from './context/AuthContext';
+import React, { useContext } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
+import { AuthContext } from "./context/AuthContext";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App: React.FC = () => {
   const authContext = useContext(AuthContext);
@@ -16,17 +22,17 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route 
-          path="/login" 
-          element={!currentUser ? <Login /> : <Navigate to="/dashboard" />} 
+        <Route
+          path="/login"
+          element={!currentUser ? <Login /> : <Navigate to="/dashboard" />}
         />
-        <Route 
-          path="/dashboard" 
-          element={currentUser ? <Dashboard /> : <Navigate to="/login" />} 
+        <Route
+          path="/dashboard"
+          element={currentUser ? <Dashboard /> : <Navigate to="/login" />}
         />
-        <Route 
-          path="*" 
-          element={<Navigate to={currentUser ? "/dashboard" : "/login"} />} 
+        <Route
+          path="*"
+          element={<Navigate to={currentUser ? "/dashboard" : "/login"} />}
         />
       </Routes>
     </Router>
