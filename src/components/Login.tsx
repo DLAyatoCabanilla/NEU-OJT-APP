@@ -23,8 +23,8 @@ const Login: React.FC = () => {
   return (
     <>
       <Container fluid="md">
-        <Row className="justify-content-md-center">
-          <Col xs lg="auto">
+        <Row className="justify-content-md-center p-3">
+          <Col className="mt-5" xs lg="auto">
             <h1>OJT Website Login</h1>
             <Button variant="dark" size="lg" onClick={signInWithGoogle}>
               <Google></Google>&nbsp;&nbsp;Login with Institutional Account
