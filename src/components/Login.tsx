@@ -2,7 +2,9 @@ import React from "react";
 import { auth, googleProvider } from "../firebase";
 import { signInWithPopup, UserCredential } from "firebase/auth";
 
-import { Container, Button, Row, Col } from "react-bootstrap";
+import LOGO_neu from "./../assets/logo_neu.jsx";
+
+import { Container, Button, Row, Col, Image } from "react-bootstrap";
 import { Google } from "react-bootstrap-icons";
 
 const Login: React.FC = () => {
@@ -22,30 +24,32 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <Container fluid="md">
-        <Row className="justify-content-md-center p-3">
-          <Col className="mt-5" xs lg="auto">
-            <h1>OJT Website Login</h1>
-            <Button variant="dark" size="lg" onClick={signInWithGoogle}>
-              <Google></Google>&nbsp;&nbsp;Login with Institutional Account
-            </Button>{" "}
-          </Col>
-        </Row>
-      </Container>
+      <div style={{ backgroundColor: "#FAF9F6" }}>
+        <Container fluid="md">
+          <div className="d-flex flex-column min-vh-100 justify-content-center align-items-center ">
+            <div className="m-5 p-5 rounded-4 shadow-lg bg-body text-center">
+              <div className="h-25 d-inline-block">
+                <LOGO_neu />
+              </div>
+
+              <h1 className="h1 m-3">
+                <b>OJT APP</b>
+              </h1>
+
+              <div>
+                <hr />
+                <p>Sign in with Institution Account</p>
+                <Button variant="dark" onClick={signInWithGoogle}>
+                  <Google />
+                  &nbsp;&nbsp;Continue with Google
+                </Button>{" "}
+              </div>
+            </div>
+          </div>
+        </Container>
+      </div>
     </>
   );
-};
-
-const styles = {
-  container: {
-    textAlign: "center" as const,
-    marginTop: "100px",
-  },
-  button: {
-    padding: "10px 20px",
-    fontSize: "16px",
-    cursor: "pointer",
-  },
 };
 
 export default Login;
