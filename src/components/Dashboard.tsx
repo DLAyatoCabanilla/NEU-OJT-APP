@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Box sx={styles.container}>
-      <Grid container spacing={2}>
+      <Grid container>
         {/* Side Panel */}
         <Grid item xs={2} sx={styles.sidePanel}>
           <Avatar sx={styles.avatarLarge} />
@@ -38,20 +38,20 @@ const Dashboard: React.FC = () => {
           </Typography>
           <Box sx={styles.sideButtonContainer}>
             <Button variant="contained" sx={styles.sideButton}>
-              <UploadFileIcon /> Upload Requirements
+              <UploadFileIcon sx={styles.iconSpacing} /> Upload Requirements
             </Button>
             <Button variant="contained" sx={styles.sideButton}>
-              <DriveFileMoveIcon /> Generate Endorsement Letter
+              <DriveFileMoveIcon sx={styles.iconSpacing} /> Generate Endorsement Letter
             </Button>
           </Box>
         </Grid>
 
         {/* Main Dashboard */}
-        <Grid item xs={10}>
+        <Grid item xs={10} sx={styles.mainContent}>
           <Grid container spacing={2}>
             {/* Header */}
             <Grid item xs={12} sx={styles.header}>
-              <Typography variant="h4">Dashboard</Typography>
+              <Typography variant="h4" sx={styles.dashboardTitle}>Dashboard</Typography>
               <Avatar src={currentUser?.photoURL || ''} sx={styles.avatar} />
             </Grid>
 
@@ -64,7 +64,7 @@ const Dashboard: React.FC = () => {
             <Grid item xs={12}>
               <Paper sx={styles.trackerProgress}>
                 <Typography variant="h6">Tracker Progress</Typography>
-                <CircularProgress variant="determinate" value={100} size={100} thickness={5} />
+                <CircularProgress variant="determinate" value={38.6} size={100} thickness={5} sx={styles.progressCircle} />
                 <Box sx={styles.trackerLabels}>
                   <Typography>Requirements: 38.6%</Typography>
                   <Typography>Student Info: 22.5%</Typography>
@@ -78,8 +78,8 @@ const Dashboard: React.FC = () => {
             <Grid item xs={12}>
               <Paper sx={styles.toDo}>
                 <Typography variant="h6">To Do:</Typography>
-                <Typography>
-                  <ul>
+                <Typography component="div">
+                  <ul style={styles.toDoList}>
                     <li><a href="#">Upload Requirements</a></li>
                     <li><a href="#">Edit Student Information</a></li>
                   </ul>
@@ -97,13 +97,18 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'row' as const,
-    padding: '20px',
+    height: '100vh',
   },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '20px',
+    padding: '10px 20px',
+  },
+  dashboardTitle: {
+    fontWeight: 500,
+    color: '#333',
   },
   avatar: {
     width: 50,
@@ -113,40 +118,72 @@ const styles = {
     width: 80,
     height: 80,
     marginBottom: '20px',
+    backgroundColor: '#ddd',
   },
   sidePanel: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f8f8f8',
     padding: '20px',
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
+    borderRight: '1px solid #e0e0e0',
   },
   userName: {
     marginTop: '10px',
     marginBottom: '30px',
+    fontSize: '18px',
+    fontWeight: 'bold',
   },
   sideButtonContainer: {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '20px',
+    width: '100%',
   },
   sideButton: {
     width: '100%',
+    backgroundColor: '#1976d2',
+    color: '#fff',
+    textTransform: 'none' as const,
+    padding: '10px 15px',
+    borderRadius: '8px',
+    '&:hover': {
+      backgroundColor: '#1565c0',
+    },
+  },
+  iconSpacing: {
+    marginRight: '10px',
+  },
+  mainContent: {
+    padding: '20px',
+    backgroundColor: '#fff',
+    flexGrow: 1,
   },
   trackerProgress: {
     padding: '20px',
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: '20px',
+    backgroundColor: '#f5f5f5',
+    borderRadius: '8px',
   },
   trackerLabels: {
-    marginLeft: '20px',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '5px',
+  },
+  progressCircle: {
+    color: '#1976d2',
   },
   toDo: {
     padding: '20px',
+    backgroundColor: '#f5f5f5',
+    borderRadius: '8px',
+  },
+  toDoList: {
+    paddingLeft: '20px',
   },
 };
 
 export default Dashboard;
-

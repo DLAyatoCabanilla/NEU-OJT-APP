@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { storage } from '../firebase'; //Bakit hindi kita mapagana????
+import { storage, db } from '../firebase'; //Bakit hindi kita mapagana????
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Button, Input, LinearProgress, Typography } from '@mui/material';
+import { doc, setDoc } from 'firebase/firestore';
 
 const UploadRequirements: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -16,10 +17,10 @@ const UploadRequirements: React.FC = () => {
 
   const handleUpload = () => {
     if (!file) return;
-
+  
     const storageRef = ref(storage, `requirements/${file.name}`); // Upload to 'requirements' folder
     const uploadTask = uploadBytesResumable(storageRef, file);
-
+  
     uploadTask.on(
       'state_changed',
       (snapshot) => {
@@ -30,14 +31,29 @@ const UploadRequirements: React.FC = () => {
       (error) => {
         console.error('Upload failed:', error);
       },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('File available at', downloadURL);
-          setDownloadURL(downloadURL); // Set the download URL
-        });
+      async () => {
+        // Get download URL after the file is uploaded
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log('File available at', downloadURL);
+        setDownloadURL(downloadURL); // Set the download URL in state
+  
+        try {
+          // Create a Firestore document for the uploaded file
+          const docRef = doc(db, "requirements", file.name);
+          await setDoc(docRef, {
+            fileName: file.name,
+            downloadURL: downloadURL,
+            uploadedAt: new Date(),
+          });
+          console.log("Document successfully written to Firestore.");
+        } catch (err) {
+          console.error("Error writing document: ", err);
+        }
       }
     );
   };
+  
+
 
   return (
     <div>
