@@ -1,16 +1,15 @@
 
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from '../firebase'
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
-const provider = new GoogleAuthProvider;
+import { auth, db } from '../firebase'
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+const provider = new GoogleAuthProvider();
 
-export const useGoogle = async () => {
+export const googleSignIn = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
     if (isInstEmail(user.email)) {
-      const db = getFirestore();
       const userRef = doc(db, 'user', user.uid);
       const docSnapshot = await getDoc(userRef);
 

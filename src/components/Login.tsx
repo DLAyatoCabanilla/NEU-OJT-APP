@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGoogle } from '../services/GoogleAuth';
+import { googleSignIn } from '../services/GoogleAuth';
 
 import LOGO_neu from "./../assets/logo_neu.jsx";
 
@@ -17,7 +17,7 @@ const Login: React.FC = () => {
     setError(null);
     setRejected(false);
     try {
-      const userData = await useGoogle();
+      const userData = await googleSignIn();
       if (userData) {
         setUser(userData);
       } else {
@@ -52,6 +52,13 @@ const Login: React.FC = () => {
                   <Google />
                   &nbsp;&nbsp;Continue with Google
                 </Button>{" "}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {rejected && (
+                  <p style={{ color: 'red' }}>
+                    You need to log-in using Institutional Email.
+                  </p>
+                )}
+
               </div>
             </div>
           </div>
