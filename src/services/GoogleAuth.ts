@@ -10,7 +10,7 @@ export const googleSignIn = async () => {
     const user = result.user;
 
     if (isInstEmail(user.email)) {
-      const userRef = doc(db, 'user', user.uid);
+      const userRef = doc(db, 'users', user.uid);
       const docSnapshot = await getDoc(userRef);
 
       const isExistUser = docSnapshot.exists();
