@@ -23,7 +23,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="Login" style={{ backgroundColor: "#F1F1F1" }}>
+    <div className="Login-body" style={{ backgroundColor: "#F1F1F1" }}>
       <Container fluid>
         <Container className="d-flex justify-content-center align-items-center vh-100">
           <div className="text-center">
@@ -44,36 +44,6 @@ const Login: React.FC = () => {
       </Container>
     </div>
   );
-
-  {
-    /*<>
-      <div style={{ backgroundColor: "#FAF9F6" }}>
-        <Container fluid="md">
-          <div className="d-flex flex-column min-vh-100 justify-content-center align-items-center ">
-            <div className="m-5 p-5 rounded-4 shadow-lg bg-body text-center">
-              <div className="h-25 d-inline-block">
-                <LOGO_neu />
-              </div>
-
-              <h1 className="h1 m-3">
-                <b>OJT APP</b>
-              </h1>
-
-              <div>
-                <hr />
-                <p>Sign in with Institution Account</p>
-                <Button variant="dark" onClick={signInWithGoogle}>
-                  <Google />
-                  &nbsp;&nbsp;Continue with Google
-                </Button>{" "}
-              </div>
-            </div>
-          </div>
-        </Container>
-      </div>
-    </>
-    */
-  }
 };
 
 export default Login;

@@ -37,7 +37,9 @@ const App: React.FC = () => {
         />
         <Route
           path="/profile"
+          // For development only
           element={<Profile />}
+
           //element={currentUser ? <Profile /> : <Navigate to="/login" />}
         />
       </Routes>
