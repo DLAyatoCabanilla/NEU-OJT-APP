@@ -2,9 +2,9 @@ import React from "react";
 import { auth, googleProvider } from "../firebase";
 import { signInWithPopup, UserCredential } from "firebase/auth";
 
-import LOGO_neu from "./../assets/logo_neu.jsx";
+import LOGO_neu from "./../assets/logo_neu.svg";
 
-import { Container, Button, Row, Col, Image } from "react-bootstrap";
+import { Container, Button, Image } from "react-bootstrap";
 import { Google } from "react-bootstrap-icons";
 
 const Login: React.FC = () => {
@@ -23,7 +23,30 @@ const Login: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="Login" style={{ backgroundColor: "#F1F1F1" }}>
+      <Container fluid>
+        <Container className="d-flex justify-content-center align-items-center vh-100">
+          <div className="text-center">
+            <Image src={LOGO_neu} style={{ width: "83%", height: "83%" }} />
+            <h1>
+              <strong>
+                <br />
+                NEU OJT APP
+              </strong>
+              <hr />
+            </h1>
+            <p>Sign in with Institution Account</p>
+            <Button variant="dark" onClick={signInWithGoogle}>
+              <Google /> &nbsp;&nbsp;Continue with Google
+            </Button>{" "}
+          </div>
+        </Container>
+      </Container>
+    </div>
+  );
+
+  {
+    /*<>
       <div style={{ backgroundColor: "#FAF9F6" }}>
         <Container fluid="md">
           <div className="d-flex flex-column min-vh-100 justify-content-center align-items-center ">
@@ -49,7 +72,8 @@ const Login: React.FC = () => {
         </Container>
       </div>
     </>
-  );
+    */
+  }
 };
 
 export default Login;
