@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import Profile from "./components/Profile";
 import { AuthContext } from "./context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -33,6 +34,13 @@ const App: React.FC = () => {
         <Route
           path="*"
           element={<Navigate to={currentUser ? "/dashboard" : "/login"} />}
+        />
+        <Route
+          path="/profile"
+          // For development only
+          element={<Profile />}
+
+          //element={currentUser ? <Profile /> : <Navigate to="/login" />}
         />
       </Routes>
     </Router>

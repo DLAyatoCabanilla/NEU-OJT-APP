@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+.image-container {
+  height: 100%;  /* Ensure container takes the full available height */
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-custom {
+  object-fit: cover;  /* Ensures the image maintains aspect ratio while filling the container */
+  width: 100%;        /* Adjust the width to fill the container */
+  height: 100%;       /* Adjust the height to fill the container */
+}
