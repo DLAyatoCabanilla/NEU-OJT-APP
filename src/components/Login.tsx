@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+
+import { googleSignIn } from '../services/GoogleAuth';
+/*
 import { auth, googleProvider } from "../firebase";
 import { signInWithPopup, UserCredential } from "firebase/auth";
+// edward-mergeCfvBranchTest*/
 
 import LOGO_neu from "./../assets/logo_neu.svg";
 import LoginBG from "./../assets/login_bg.jpg";
@@ -10,8 +14,24 @@ import { Container, Button, Image } from "react-bootstrap";
 import { Google } from "react-bootstrap-icons";
 
 const Login: React.FC = () => {
-  const signInWithGoogle = async () => {
+  const [user, setUser] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [rejected, setRejected] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    setError(null);
+    setRejected(false);
     try {
+
+      const userData = await googleSignIn();
+      if (userData) {
+        setUser(userData);
+      } else {
+        setRejected(true);
+/*
+=======
       const result: UserCredential = await signInWithPopup(
         auth,
         googleProvider
@@ -21,8 +41,14 @@ const Login: React.FC = () => {
       if (error instanceof Error) {
         console.error("Error during sign-in:", error.message);
         <LoginErrorModal />;
+// edward-mergeCfvBranchTest*/
       }
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
+
   };
 
   const loginDiv = {
@@ -32,6 +58,25 @@ const Login: React.FC = () => {
     backgroundRepeat: "no-repeat",
   };
 
+/*       
+//CfvBranch
+              <div>
+                <hr />
+                <p>Sign in with Institution Account</p>
+                <Button variant="dark" onClick={handleGoogleLogin}>
+                  <Google />
+                  &nbsp;&nbsp;Continue with Google
+                </Button>{" "}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {rejected && (
+                  <p style={{ color: 'red' }}>
+                    You need to log-in using Institutional Email.
+                  </p>
+                )}
+
+              </div>
+            </div>
+*/
   return (
     <div style={loginDiv}>
       <Container fluid>
@@ -44,7 +89,7 @@ const Login: React.FC = () => {
               <hr />
             </h1>
             <p>Sign in with Institution Account</p>
-            <Button variant="dark" onClick={signInWithGoogle}>
+            <Button variant="dark" onClick={handleGoogleLogin}>
               <Google /> &nbsp;&nbsp;Continue with Google
             </Button>{" "}
             <div className="pb-2" />
