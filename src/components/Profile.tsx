@@ -1,5 +1,13 @@
 import React from "react";
-import { Container, Row, Col, Button, Image, Alert } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Image,
+  Alert,
+  ThemeProvider,
+} from "react-bootstrap";
 import profilePic from "../assets/profile_placeholder.png";
 import ApartmentRoundedIcon from "@mui/icons-material/ApartmentRounded";
 import BusinessCenterRoundedIcon from "@mui/icons-material/BusinessCenterRounded";
@@ -30,14 +38,14 @@ const Profile: React.FC = () => {
 
       <Container className="mt-3">
         <Row>
-          <Col lg={3} className="bg-white rounded-3 shadow-sm m-1 p-3">
-            <Container fluid>
+          <Col lg={3}>
+            <Container fluid className="bg-white rounded-3 shadow-sm m-1 p-3">
               <Row>
-                <Col xs={3} lg={12} className="mt-2">
+                <Col xs={3} lg={12} className="mt-2 text-center">
                   <Image src={profilePic} roundedCircle fluid />
                 </Col>
 
-                <Col className="m-1 mt-3">
+                <Col className="ml-0 mt-3">
                   <strong>
                     {usrLastName}, {usrFirstName}
                   </strong>
@@ -80,10 +88,17 @@ const Profile: React.FC = () => {
                 "dark",
                 "dark",
                 "dark",
+                "dark",
+                "dark",
+                "dark",
+                "dark",
+                "dark",
+                "dark",
+                "dark",
+                "dark",
+                "dark",
               ].map((variant) => (
-                <Alert key={variant} variant={variant}>
-                  Test Element Only
-                </Alert>
+                <Alert variant={variant}>Test Element Only</Alert>
               ))}
             </Container>
           </Col>

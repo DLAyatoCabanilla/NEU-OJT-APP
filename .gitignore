@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 
+# TESTENV
+/OLD
+/NEW
+
 # testing
 /coverage
 

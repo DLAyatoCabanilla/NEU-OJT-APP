@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { googleSignIn } from '../services/GoogleAuth';
+import { googleSignIn } from "../services/GoogleAuth";
 /*
 import { auth, googleProvider } from "../firebase";
 import { signInWithPopup, UserCredential } from "firebase/auth";
@@ -24,31 +24,19 @@ const Login: React.FC = () => {
     setError(null);
     setRejected(false);
     try {
-
       const userData = await googleSignIn();
-      if (userData) {
+      console.log("[d] user: " + userData);
+
+      if (userData != null) {
         setUser(userData);
       } else {
         setRejected(true);
-/*
-=======
-      const result: UserCredential = await signInWithPopup(
-        auth,
-        googleProvider
-      );
-      console.log(result.user); // Handle the signed-in user info here
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error("Error during sign-in:", error.message);
-        <LoginErrorModal />;
-// edward-mergeCfvBranchTest*/
       }
     } catch (error: any) {
       setError(error.message);
     } finally {
       setLoading(false);
     }
-
   };
 
   const loginDiv = {
@@ -58,7 +46,7 @@ const Login: React.FC = () => {
     backgroundRepeat: "no-repeat",
   };
 
-/*       
+  /*       
 //CfvBranch
               <div>
                 <hr />
@@ -92,6 +80,8 @@ const Login: React.FC = () => {
             <Button variant="dark" onClick={handleGoogleLogin}>
               <Google /> &nbsp;&nbsp;Continue with Google
             </Button>{" "}
+            {error && <p style={{ color: "red" }}>{error}</p>}
+            {rejected && <LoginErrorModal />}
             <div className="pb-2" />
           </div>
         </Container>
