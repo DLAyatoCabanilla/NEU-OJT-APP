@@ -13,6 +13,8 @@ import LoginErrorModal from "./../context/Login/Obj-LoginErrorModal";
 import { Container, Button, Image } from "react-bootstrap";
 import { Google } from "react-bootstrap-icons";
 
+import { handleSignOut } from "../services/AuthFunctions";
+
 const Login: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
@@ -25,16 +27,19 @@ const Login: React.FC = () => {
     setRejected(false);
     try {
       const userData = await googleSignIn();
-      console.log("[d] user: " + userData);
+      console.log("[d] user: " + userData?.email);
 
-      if (userData != null) {
+      if (!(userData?.email === undefined)) {
+        console.log("[d] setuser triggered");
         setUser(userData);
       } else {
+        console.log("[d] setuser NOT triggered | else statement");
         setRejected(true);
       }
     } catch (error: any) {
       setError(error.message);
     } finally {
+      console.log("[d] finally triggered");
       setLoading(false);
     }
   };

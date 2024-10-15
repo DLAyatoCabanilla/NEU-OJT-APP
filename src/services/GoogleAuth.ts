@@ -8,16 +8,18 @@ export const googleSignIn = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    console.log("[d] user = " + user)
+    console.log("[d] user = " + user.email)
 
     if (isInstEmail(user.email)) {
       const userRef = doc(db, 'users', user.uid);
-      const docSnapshot = await getDoc(userRef);
+      //const docSnapshot = await getDoc(userRef);
 
-      const isExistUser = docSnapshot.exists();
-      console.log("[d] isExisting user = " + isExistUser)
+      //const isExistUser = docSnapshot.exists();
+      //console.log("[d] isExisting user = " + isExistUser)
 
-      if (!isExistUser) {
+      //if (!isExistUser) {
+
+        //console.log("im here [121]")
         
         // DISABLED FOR DEBUGGING
         /*
@@ -31,7 +33,7 @@ export const googleSignIn = async () => {
         */
 
         
-      } 
+      //} 
       console.log("this line triggered [ln27]")
       return user;
 

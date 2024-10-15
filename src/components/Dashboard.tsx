@@ -11,6 +11,9 @@ import {
   Paper,
   CircularProgress,
 } from "@mui/material";
+
+import { handleSignOut } from "../services/AuthFunctions";
+
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DriveFileMoveIcon from "@mui/icons-material/DriveFileMove";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
@@ -27,16 +30,7 @@ const Dashboard: React.FC = () => {
 
   const { currentUser } = authContext;
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      console.log("User signed out.");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error("Sign out error:", error.message);
-      }
-    }
-  };
+  console.log("user: " + currentUser?.email);
 
   return (
     <div>
