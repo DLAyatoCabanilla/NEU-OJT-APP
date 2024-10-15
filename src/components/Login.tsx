@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { auth, googleProvider } from "../firebase";
 import { signInWithPopup, UserCredential } from "firebase/auth";
 
 import LOGO_neu from "./../assets/logo_neu.svg";
-import Login_bg from "./../assets/login_bg.jpg";
+import LoginBG from "./../assets/login_bg.jpg";
+import LoginErrorModal from "./../context/Login/Obj-LoginErrorModal";
 
 import { Container, Button, Image } from "react-bootstrap";
 import { Google } from "react-bootstrap-icons";
@@ -19,12 +20,13 @@ const Login: React.FC = () => {
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error("Error during sign-in:", error.message);
+        <LoginErrorModal />;
       }
     }
   };
 
   const loginDiv = {
-    backgroundImage: "url(" + Login_bg + ")",
+    backgroundImage: "url(" + LoginBG + ")",
     backgroundPosition: "center",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
@@ -38,7 +40,7 @@ const Login: React.FC = () => {
             <div className="pt-2" />
             <Image src={LOGO_neu} style={{ width: "83%", height: "83%" }} />
             <h1 className="mt-4">
-              <strong>NEU OJT APP</strong>
+              <strong>OJT-APP</strong>
               <hr />
             </h1>
             <p>Sign in with Institution Account</p>
