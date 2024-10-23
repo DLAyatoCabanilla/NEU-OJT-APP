@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import UploadRequirements from "./components/UploadRequirements";
 import { AuthContext } from "./context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -34,6 +35,11 @@ const App: React.FC = () => {
           path="*"
           element={<Navigate to={currentUser ? "/dashboard" : "/login"} />}
         />
+        <Route
+          path="/uploadRequirements"
+          element={currentUser ? <UploadRequirements /> : <Navigate to="/login" />}
+        />
+
       </Routes>
     </Router>
   );
