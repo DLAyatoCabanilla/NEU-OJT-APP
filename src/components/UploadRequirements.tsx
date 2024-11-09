@@ -17,10 +17,10 @@ const UploadRequirements: React.FC = () => {
 
   const handleUpload = () => {
     if (!file) return;
-  
+
     const storageRef = ref(storage, `requirements/${file.name}`); // Upload to 'requirements' folder
     const uploadTask = uploadBytesResumable(storageRef, file);
-  
+
     uploadTask.on(
       'state_changed',
       (snapshot) => {
@@ -36,7 +36,7 @@ const UploadRequirements: React.FC = () => {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         console.log('File available at', downloadURL);
         setDownloadURL(downloadURL); // Set the download URL in state
-  
+
         try {
           // Create a Firestore document for the uploaded file
           const docRef = doc(db, "requirements", file.name);
@@ -52,12 +52,12 @@ const UploadRequirements: React.FC = () => {
       }
     );
   };
-  
+
 
 
   return (
     <div>
-      <Typography variant="h6">Upload Requirements</Typography>
+      <Typography variant="h6">Upload Requirements </Typography>
       <Input type="file" onChange={handleFileChange} />
       <Button onClick={handleUpload} variant="contained" sx={{ marginTop: '10px' }}>
         Upload File

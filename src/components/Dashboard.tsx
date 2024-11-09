@@ -6,10 +6,12 @@ import { Button, Grid, Typography, Box, Avatar, Paper, CircularProgress } from '
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import UploadRequirements from './UploadRequirements';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
   const authContext = useContext(AuthContext);
-
+  const navigate = useNavigate();
   if (!authContext) {
     return <div>Loading...</div>;
   }
@@ -27,6 +29,10 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handelUploadRequirments = () => {
+    console.log('User Will Upload .');
+    navigate("/uploadRequirements");
+  }
   return (
     <Box sx={styles.container}>
       <Grid container>
@@ -37,7 +43,7 @@ const Dashboard: React.FC = () => {
             STUDENT
           </Typography>
           <Box sx={styles.sideButtonContainer}>
-            <Button variant="contained" sx={styles.sideButton}>
+            <Button variant="contained" onClick={handelUploadRequirments} sx={styles.sideButton}>
               <UploadFileIcon sx={styles.iconSpacing} /> Upload Requirements
             </Button>
             <Button variant="contained" sx={styles.sideButton}>
