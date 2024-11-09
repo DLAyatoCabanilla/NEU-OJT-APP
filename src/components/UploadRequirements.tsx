@@ -57,7 +57,7 @@ const UploadRequirements: React.FC = () => {
 
   return (
     <div>
-      <Typography variant="h6">Upload Requirements</Typography>
+      <Typography variant="h6">Upload Requirements </Typography>
       <Input type="file" onChange={handleFileChange} />
       <Button onClick={handleUpload} variant="contained" sx={{ marginTop: '10px' }}>
         Upload File
