@@ -5,8 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { Button, Grid, Typography, Box, Avatar, Paper, CircularProgress } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import UploadRequirements from './UploadRequirements';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
@@ -22,6 +21,7 @@ const Dashboard: React.FC = () => {
     try {
       await signOut(auth);
       console.log('User signed out.');
+      navigate('/'); // Navigate to Login page (Login.tsx)
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error('Sign out error:', error.message);
@@ -30,24 +30,40 @@ const Dashboard: React.FC = () => {
   };
 
   const handelUploadRequirments = () => {
-    console.log('User Will Upload .');
-    navigate("/uploadRequirements");
-  }
+    console.log('User Will Upload.');
+    navigate('/uploadRequirements');
+  };
+
   return (
     <Box sx={styles.container}>
       <Grid container>
         {/* Side Panel */}
         <Grid item xs={2} sx={styles.sidePanel}>
-          <Avatar sx={styles.avatarLarge} />
+          {/* Profile Picture */}
+          <Avatar src={currentUser?.photoURL || ''} sx={styles.avatarLarge} />
           <Typography variant="h6" sx={styles.userName}>
             STUDENT
           </Typography>
           <Box sx={styles.sideButtonContainer}>
-            <Button variant="contained" onClick={handelUploadRequirments} sx={styles.sideButton}>
+            <Button
+              variant="contained"
+              onClick={handelUploadRequirments}
+              sx={styles.sideButton}
+            >
               <UploadFileIcon sx={styles.iconSpacing} /> Upload Requirements
             </Button>
             <Button variant="contained" sx={styles.sideButton}>
               <DriveFileMoveIcon sx={styles.iconSpacing} /> Generate Endorsement Letter
+            </Button>
+          </Box>
+          {/* Logout Button */}
+          <Box sx={styles.logoutContainer}>
+            <Button
+              variant="contained"
+              onClick={handleSignOut}
+              sx={styles.logoutButton}
+            >
+              <LogoutIcon sx={styles.iconSpacing} /> Logout
             </Button>
           </Box>
         </Grid>
@@ -57,7 +73,9 @@ const Dashboard: React.FC = () => {
           <Grid container spacing={2}>
             {/* Header */}
             <Grid item xs={12} sx={styles.header}>
-              <Typography variant="h4" sx={styles.dashboardTitle}>Dashboard</Typography>
+              <Typography variant="h4" sx={styles.dashboardTitle}>
+                Dashboard
+              </Typography>
               <Avatar src={currentUser?.photoURL || ''} sx={styles.avatar} />
             </Grid>
 
@@ -70,7 +88,13 @@ const Dashboard: React.FC = () => {
             <Grid item xs={12}>
               <Paper sx={styles.trackerProgress}>
                 <Typography variant="h6">Tracker Progress</Typography>
-                <CircularProgress variant="determinate" value={38.6} size={100} thickness={5} sx={styles.progressCircle} />
+                <CircularProgress
+                  variant="determinate"
+                  value={38.6}
+                  size={100}
+                  thickness={5}
+                  sx={styles.progressCircle}
+                />
                 <Box sx={styles.trackerLabels}>
                   <Typography>Requirements: 38.6%</Typography>
                   <Typography>Student Info: 22.5%</Typography>
@@ -86,8 +110,12 @@ const Dashboard: React.FC = () => {
                 <Typography variant="h6">To Do:</Typography>
                 <Typography component="div">
                   <ul style={styles.toDoList}>
-                    <li><a href="#">Upload Requirements</a></li>
-                    <li><a href="#">Edit Student Information</a></li>
+                    <li>
+                      <a href="#">Upload Requirements</a>
+                    </li>
+                    <li>
+                      <a href="#">Edit Student Information</a>
+                    </li>
                   </ul>
                 </Typography>
               </Paper>
@@ -105,34 +133,20 @@ const styles = {
     flexDirection: 'row' as const,
     height: '100vh',
   },
-  header: {
+  sidePanel: {
+    backgroundColor: '#6DBCE1', // Light blue for the sidebar
+    padding: '20px',
     display: 'flex',
-    justifyContent: 'space-between',
+    flexDirection: 'column' as const,
     alignItems: 'center',
-    marginBottom: '20px',
-    padding: '10px 20px',
-  },
-  dashboardTitle: {
-    fontWeight: 500,
-    color: '#333',
-  },
-  avatar: {
-    width: 50,
-    height: 50,
+    color: '#fff',
+    justifyContent: 'space-between', // Space between buttons and logout
   },
   avatarLarge: {
     width: 80,
     height: 80,
     marginBottom: '20px',
-    backgroundColor: '#ddd',
-  },
-  sidePanel: {
     backgroundColor: '#f8f8f8',
-    padding: '20px',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
-    borderRight: '1px solid #e0e0e0',
   },
   userName: {
     marginTop: '10px',
@@ -148,13 +162,30 @@ const styles = {
   },
   sideButton: {
     width: '100%',
-    backgroundColor: '#1976d2',
-    color: '#fff',
+    backgroundColor: '#FFF',
+    color: '#6DBCE1',
     textTransform: 'none' as const,
     padding: '10px 15px',
-    borderRadius: '8px',
+    borderRadius: '20px',
+    fontWeight: 'bold',
     '&:hover': {
-      backgroundColor: '#1565c0',
+      backgroundColor: '#e0f4ff',
+    },
+  },
+  logoutContainer: {
+    marginTop: 'auto', // Push logout button to the bottom
+    width: '100%',
+  },
+  logoutButton: {
+    width: '100%',
+    backgroundColor: '#FFF',
+    color: '#FF5E5B', // Red for logout button
+    textTransform: 'none' as const,
+    padding: '10px 15px',
+    borderRadius: '20px',
+    fontWeight: 'bold',
+    '&:hover': {
+      backgroundColor: '#FFECEC',
     },
   },
   iconSpacing: {
@@ -162,8 +193,23 @@ const styles = {
   },
   mainContent: {
     padding: '20px',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFDD44', // Yellow for the main section
     flexGrow: 1,
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px',
+    padding: '10px 20px',
+  },
+  dashboardTitle: {
+    fontWeight: 500,
+    color: '#333',
+  },
+  avatar: {
+    width: 50,
+    height: 50,
   },
   trackerProgress: {
     padding: '20px',
@@ -180,7 +226,7 @@ const styles = {
     gap: '5px',
   },
   progressCircle: {
-    color: '#1976d2',
+    color: '#FF5E5B', // Red for the circular progress
   },
   toDo: {
     padding: '20px',
