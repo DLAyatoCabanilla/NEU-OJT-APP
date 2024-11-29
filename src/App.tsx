@@ -8,6 +8,8 @@ import {
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
+import StudentInfo from "./components/StudentInfo";
+
 import { AuthContext } from "./context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -34,6 +36,13 @@ const App: React.FC = () => {
         <Route
           path="*"
           element={<Navigate to={currentUser ? "/dashboard" : "/login"} />}
+        />
+        <Route
+          path="/profile/config"
+          // For development only
+          element={<StudentInfo />}
+
+          //element={currentUser ? <StudentInfo /> : <Navigate to="/login" />}
         />
         <Route
           path="/profile"
