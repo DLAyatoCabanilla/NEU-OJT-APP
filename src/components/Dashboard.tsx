@@ -1,18 +1,49 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { auth } from '../firebase';
-import { signOut } from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth';
 import { AuthContext } from '../context/AuthContext';
 import { Button, Grid, Typography, Box, Avatar, Paper, CircularProgress } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import GenerateEndorsmentLetterr from './GenerateEndorsmentLetter';
 import EditCompany from './EditCompany';
+import { db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+
+const userCheck = async () => {
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+
+      const userRef = doc(db, 'users', user.uid);
+      const snapshot = await getDoc(userRef);
+      const role = snapshot.get('role');
+      return role
+    }
+
+  } catch (error) {
+    console.error('something is wrong', error)
+    return null;
+  }
+}
 
 const Dashboard: React.FC = () => {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      const userRole = await userCheck();
+      setRole(userRole);
+    };
+    fetchRole();
+  },
+
+    []);
+
   if (!authContext) {
     return <div>Loading...</div>;
   }
@@ -47,15 +78,20 @@ const Dashboard: React.FC = () => {
             STUDENT
           </Typography>
           <Box sx={styles.sideButtonContainer}>
-            <Button
-              variant="contained"
-              onClick={handelUploadRequirments}
-              sx={styles.sideButton}
-            >
-              <UploadFileIcon sx={styles.iconSpacing} /> Upload Requirements
-            </Button>
-            <GenerateEndorsmentLetterr />
-            <EditCompany />
+            <>
+              <Button
+                variant="contained"
+                onClick={handelUploadRequirments}
+                sx={styles.sideButton}
+              >
+                <UploadFileIcon sx={styles.iconSpacing} /> Upload Requirements
+              </Button>
+              <GenerateEndorsmentLetterr />
+              {role === 'Admin' && <EditCompany />}
+            </>
+
+
+
           </Box>
           {/* Logout Button */}
           <Box sx={styles.logoutContainer}>
