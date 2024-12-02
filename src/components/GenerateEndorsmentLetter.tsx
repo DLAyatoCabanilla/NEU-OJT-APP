@@ -4,32 +4,30 @@ import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import { Button } from '@mui/material';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 
-const onClickDownload = async () => {
+const handleDownload = async () => {
+  const storage = getStorage();
+  const pathRef = ref(storage, 'EndorsmentLetter/Edorsment sample.pdf');
   try {
-    const storage = getStorage();
-    const path = ref(storage, 'EndorsmentLetter/Endorsment sample.pdf')
+    const url = await getDownloadURL(pathRef);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Edorsment sample.pdf';
+    document.body.appendChild(a);
 
-    const downloadURL = await getDownloadURL(path);
-    const link = document.createElement('a');
-    link.href = downloadURL;
-    link.download
-    link.click();
+    a.click()
 
-
-  } catch {
-    console.error("Error dowload");
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error("Something is wrong");
   }
 
 }
 
-const trysome = () => {
 
-  console.log("working dowload");
-}
 const GenerateEndorsmentLetterr: React.FC = () => {
   return (
 
-    <Button variant="contained" sx={styles.sideButton} onClick={trysome}>
+    <Button variant="contained" sx={styles.sideButton} onClick={handleDownload}>
       <DriveFileMoveIcon sx={styles.iconSpacing} /> Generate Endorsement Letter
     </Button>
   )

@@ -7,6 +7,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
+import GenerateEndorsmentLetterr from './GenerateEndorsmentLetter';
 
 const Dashboard: React.FC = () => {
   const authContext = useContext(AuthContext);
@@ -52,9 +53,7 @@ const Dashboard: React.FC = () => {
             >
               <UploadFileIcon sx={styles.iconSpacing} /> Upload Requirements
             </Button>
-            <Button variant="contained" sx={styles.sideButton}>
-              <DriveFileMoveIcon sx={styles.iconSpacing} /> Generate Endorsement Letter
-            </Button>
+            <GenerateEndorsmentLetterr />
           </Box>
           {/* Logout Button */}
           <Box sx={styles.logoutContainer}>
