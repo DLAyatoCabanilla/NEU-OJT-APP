@@ -8,6 +8,7 @@ import {
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import UploadRequirements from "./components/UploadRequirements";
+import CompanyPage from './components/EditCompanyTab/CompanyPage';
 import { AuthContext } from "./context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -17,7 +18,6 @@ const App: React.FC = () => {
   if (!authContext) {
     return <div>Loading...</div>;
   }
-
   const { currentUser } = authContext;
 
   return (
@@ -38,6 +38,10 @@ const App: React.FC = () => {
         <Route
           path="/uploadRequirements"
           element={currentUser ? <UploadRequirements /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/companyPage"
+          element={currentUser ? <CompanyPage /> : <Navigate to="/login" />}
         />
 
       </Routes>
