@@ -16,23 +16,22 @@ const userCheck = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
-
       const userRef = doc(db, 'users', user.uid);
       const snapshot = await getDoc(userRef);
       const role = snapshot.get('role');
-      return role
+      return role;
     }
-
   } catch (error) {
-    console.error('something is wrong', error)
+    console.error('something is wrong', error);
     return null;
   }
-}
+};
 
 const Dashboard: React.FC = () => {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
   const [role, setRole] = useState(null);
+  const [requirementsProgress, setRequirementsProgress] = useState<number>(0); // Added state to track progress.
 
   useEffect(() => {
     const fetchRole = async () => {
@@ -40,9 +39,26 @@ const Dashboard: React.FC = () => {
       setRole(userRole);
     };
     fetchRole();
-  },
 
-    []);
+    // Fetch progress from Firestore
+    const fetchProgress = async () => {
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user) {
+          const progressRef = doc(db, 'requirementsProgress', user.uid);
+          const progressSnap = await getDoc(progressRef);
+          if (progressSnap.exists()) {
+            setRequirementsProgress(progressSnap.get('progress')); // Set the progress value from Firestore.
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching progress:', error);
+      }
+    };
+
+    fetchProgress();
+  }, []);
 
   if (!authContext) {
     return <div>Loading...</div>;
@@ -62,7 +78,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handelUploadRequirments = () => {
+  const handleUploadRequirements = () => {
     console.log('User Will Upload.');
     navigate('/uploadRequirements');
   };
@@ -81,7 +97,7 @@ const Dashboard: React.FC = () => {
             <>
               <Button
                 variant="contained"
-                onClick={handelUploadRequirments}
+                onClick={handleUploadRequirements}
                 sx={styles.sideButton}
               >
                 <UploadFileIcon sx={styles.iconSpacing} /> Upload Requirements
@@ -89,9 +105,6 @@ const Dashboard: React.FC = () => {
               <GenerateEndorsmentLetterr />
               {role === 'Admin' && <EditCompany />}
             </>
-
-
-
           </Box>
           {/* Logout Button */}
           <Box sx={styles.logoutContainer}>
@@ -125,15 +138,16 @@ const Dashboard: React.FC = () => {
             <Grid item xs={12}>
               <Paper sx={styles.trackerProgress}>
                 <Typography variant="h6">Tracker Progress</Typography>
+                {/* Dynamically update progress circle */}
                 <CircularProgress
                   variant="determinate"
-                  value={38.6}
+                  value={requirementsProgress} // Dynamically set value.
                   size={100}
                   thickness={5}
                   sx={styles.progressCircle}
                 />
                 <Box sx={styles.trackerLabels}>
-                  <Typography>Requirements: 38.6%</Typography>
+                  <Typography>Requirements: {requirementsProgress}%</Typography> 
                   <Typography>Student Info: 22.5%</Typography>
                   <Typography>Other: 30.8%</Typography>
                   <Typography>Other: 8.1%</Typography>
