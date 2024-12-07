@@ -3,22 +3,19 @@ import { storage, db } from '../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Button, Typography, Box, Card, CardContent, CardActions, LinearProgress, Input } from '@mui/material';
 import { CheckCircle, Cancel } from '@mui/icons-material';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import StudentSidePanel from './StudentSidePanel';
 
-
-const StudentSidePanel = () => (
-  <Box sx={styles.sidePanel}>
-    <Typography variant="h5" sx={styles.sidePanelTitle}>
-      Student Panel
-    </Typography>
-    {/* Add any navigation links or additional side panel content here */}
-  </Box>
-);
 
 const UploadRequirements: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
-  const [downloadURL, setDownloadURL] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number | null }>({
+    parentConsent: null,
+    medicalExam: null,
+    psychExam: null,
+    resume: null,
+  });
   const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: boolean }>({
     parentConsent: false,
     medicalExam: false,
@@ -26,46 +23,56 @@ const UploadRequirements: React.FC = () => {
     resume: false,
   });
 
+  const updateDashboardProgress = async () => {
+    const uploadedCount = Object.values(uploadedFiles).filter((uploaded) => uploaded).length;
+    const progress = (uploadedCount / 4) * 100; // Calculate percentage.
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      const progressRef = doc(db, 'requirementsProgress', user.uid);
+      await updateDoc(progressRef, { progress }); // Update progress in Firestore.
+    } else {
+      console.error('User is not logged in.');
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
   };
 
-  const handleUpload = (requirement: string) => {
+  const handleUpload = async (requirement: string) => {
     if (!file) return;
-
+  
     const storageRef = ref(storage, `requirements/${requirement}/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
+  
     uploadTask.on(
       'state_changed',
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setUploadProgress(progress);
-        console.log('Upload is ' + progress + '% done');
+        setUploadProgress((prev) => ({ ...prev, [requirement]: progress }));
+        console.log(`Upload progress for ${requirement}: ${progress}%`);
       },
-      (error) => {
-        console.error('Upload failed:', error);
-      },
+      (error) => console.error('Upload failed:', error),
       async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log('File available at', downloadURL);
-        setDownloadURL(downloadURL);
-
         try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log('File uploaded successfully:', downloadURL);
+  
           const docRef = doc(db, 'requirements', requirement);
           await setDoc(docRef, {
             fileName: file.name,
-            downloadURL: downloadURL,
+            downloadURL,
             uploadedAt: new Date(),
           });
-          console.log('Document successfully written to Firestore.');
-
-          // Mark this requirement as uploaded
+  
           setUploadedFiles((prev) => ({ ...prev, [requirement]: true }));
-        } catch (err) {
-          console.error('Error writing document: ', err);
+          console.log(`${requirement} marked as uploaded.`);
+          await updateDashboardProgress(); // Update dashboard progress after upload.
+        } catch (error) {
+          console.error('Error saving file data or updating progress:', error);
         }
       }
     );
@@ -75,11 +82,16 @@ const UploadRequirements: React.FC = () => {
     <Card sx={styles.card}>
       <CardContent>
         <Typography variant="h6">{title}</Typography>
-        <Input type="file" onChange={handleFileChange} sx={{ marginTop: '10px' }} />
-        {uploadProgress !== null && (
-          <Box sx={{ marginTop: '10px' }}>
-            <Typography>Upload Progress: {Math.round(uploadProgress)}%</Typography>
-            <LinearProgress variant="determinate" value={uploadProgress} />
+        <Input type="file" onChange={handleFileChange} sx={{ marginTop: "10px" }} />
+        {uploadProgress[requirementKey] !== null && (
+          <Box sx={{ marginTop: "10px" }}>
+            <Typography>
+              Upload Progress: {Math.round(uploadProgress[requirementKey]!)}%
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={uploadProgress[requirementKey]!}
+            />
           </Box>
         )}
       </CardContent>
@@ -92,9 +104,9 @@ const UploadRequirements: React.FC = () => {
           Upload File
         </Button>
         {uploadedFiles[requirementKey] ? (
-          <CheckCircle color="success" sx={{ marginLeft: '10px' }} />
+          <CheckCircle color="success" sx={{ marginLeft: "10px" }} />
         ) : (
-          <Cancel color="error" sx={{ marginLeft: '10px' }} />
+          <Cancel color="error" sx={{ marginLeft: "10px" }} />
         )}
       </CardActions>
     </Card>
@@ -115,10 +127,10 @@ const UploadRequirements: React.FC = () => {
         </Typography>
 
         <Box sx={styles.cardContainer}>
-          {renderCard('Parent Consent', 'parentConsent')}
-          {renderCard('Medical Exam', 'medicalExam')}
-          {renderCard('Psychology Exam', 'psychExam')}
-          {renderCard('Resume', 'resume')}
+          {renderCard("Parent Consent", "parentConsent")}
+          {renderCard("Medical Exam", "medicalExam")}
+          {renderCard("Psychology Exam", "psychExam")}
+          {renderCard("Resume", "resume")}
         </Box>
       </Box>
     </Box>
@@ -129,16 +141,6 @@ const styles = {
   layout: {
     display: 'flex',
     height: '100vh',
-  },
-  sidePanel: {
-    width: '250px',
-    backgroundColor: '#2E3B55',
-    padding: '20px',
-    color: '#fff',
-  },
-  sidePanelTitle: {
-    fontWeight: 'bold',
-    marginBottom: '20px',
   },
   container: {
     flex: 1,
