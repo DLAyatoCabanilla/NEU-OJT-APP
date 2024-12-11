@@ -7,8 +7,13 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+
 import UploadRequirements from "./components/UploadRequirements";
 import CompanyPage from './components/EditCompanyTab/CompanyPage';
+
+import Profile from "./components/Profile";
+import StudentInfo from "./components/StudentInfo";
+
 import { AuthContext } from "./context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -36,12 +41,27 @@ const App: React.FC = () => {
           element={<Navigate to={currentUser ? "/dashboard" : "/login"} />}
         />
         <Route
+
           path="/uploadRequirements"
           element={currentUser ? <UploadRequirements /> : <Navigate to="/login" />}
         />
         <Route
           path="/companyPage"
           element={currentUser ? <CompanyPage /> : <Navigate to="/login" />}
+        />
+        
+          path="/profile/config"
+          // For development only
+          element={<StudentInfo />}
+
+          //element={currentUser ? <StudentInfo /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/profile"
+          // For development only
+          element={<Profile />}
+
+          //element={currentUser ? <Profile /> : <Navigate to="/login" />}
         />
 
       </Routes>
