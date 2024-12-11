@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, browserSessionPersistence, GoogleAuthProvider } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
+import { getFirestore } from 'firebase/firestore';
 
 
 // Your web app's Firebase configuration
@@ -35,8 +36,9 @@ setPersistence(auth, browserSessionPersistence)
 
 // Initialize GoogleAuthProvider
 const googleProvider = new GoogleAuthProvider();
+export const db = getFirestore(app);
 
 // Export Firebase app, auth, analytics, and googleProvider for usage
 export { app, auth, analytics, googleProvider };
 
-export const storage = getStorage(app, "https://console.firebase.google.com/u/0/project/neu-ojt-app/storage/neu-ojt-app.appspot.com/files");
+export const storage = getStorage(app);
