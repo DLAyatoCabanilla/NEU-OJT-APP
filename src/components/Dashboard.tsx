@@ -1,28 +1,37 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { auth } from '../firebase';
-import { getAuth, signOut } from 'firebase/auth';
-import { AuthContext } from '../context/AuthContext';
-import { Button, Grid, Typography, Box, Avatar, Paper, CircularProgress } from '@mui/material';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom';
-import GenerateEndorsmentLetterr from './GenerateEndorsmentLetter';
-import EditCompany from './EditCompany';
-import { db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import React, { useContext, useEffect, useState } from "react";
+import { auth } from "../firebase";
+import { getAuth, signOut } from "firebase/auth";
+import { AuthContext } from "../context/AuthContext";
+import {
+  Button,
+  Grid,
+  Typography,
+  Box,
+  Avatar,
+  Paper,
+  CircularProgress,
+} from "@mui/material";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
+import GenerateEndorsmentLetterr from "./GenerateEndorsmentLetter";
+import EditCompany from "./EditCompany";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const userCheck = async () => {
   try {
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
-      const userRef = doc(db, 'users', user.uid);
+      const userRef = doc(db, "users", user.uid);
       const snapshot = await getDoc(userRef);
-      const role = snapshot.get('role');
+      const role = snapshot.get("role");
       return role;
     }
   } catch (error) {
-    console.error('something is wrong', error);
+    console.error("something is wrong", error);
     return null;
   }
 };
@@ -46,14 +55,14 @@ const Dashboard: React.FC = () => {
         const auth = getAuth();
         const user = auth.currentUser;
         if (user) {
-          const progressRef = doc(db, 'requirementsProgress', user.uid);
+          const progressRef = doc(db, "requirementsProgress", user.uid);
           const progressSnap = await getDoc(progressRef);
           if (progressSnap.exists()) {
-            setRequirementsProgress(progressSnap.get('progress')); // Set the progress value from Firestore.
+            setRequirementsProgress(progressSnap.get("progress")); // Set the progress value from Firestore.
           }
         }
       } catch (error) {
-        console.error('Error fetching progress:', error);
+        console.error("Error fetching progress:", error);
       }
     };
 
@@ -69,18 +78,23 @@ const Dashboard: React.FC = () => {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      console.log('User signed out.');
-      navigate('/'); // Navigate to Login page (Login.tsx)
+      console.log("User signed out.");
+      navigate("/"); // Navigate to Login page (Login.tsx)
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error('Sign out error:', error.message);
+        console.error("Sign out error:", error.message);
       }
     }
   };
 
   const handleUploadRequirements = () => {
-    console.log('User Will Upload.');
-    navigate('/uploadRequirements');
+    console.log("User Will Upload.");
+    navigate("/uploadRequirements");
+  };
+
+  const handleProfileButton = () => {
+    console.log("User Will Upload.");
+    navigate("/profile");
   };
 
   return (
@@ -89,12 +103,19 @@ const Dashboard: React.FC = () => {
         {/* Side Panel */}
         <Grid item xs={2} sx={styles.sidePanel}>
           {/* Profile Picture */}
-          <Avatar src={currentUser?.photoURL || ''} sx={styles.avatarLarge} />
+          <Avatar src={currentUser?.photoURL || ""} sx={styles.avatarLarge} />
           <Typography variant="h6" sx={styles.userName}>
             STUDENT
           </Typography>
           <Box sx={styles.sideButtonContainer}>
             <>
+              <Button
+                variant="contained"
+                onClick={handleProfileButton}
+                sx={styles.sideButton}
+              >
+                <PersonIcon sx={styles.iconSpacing} /> Profile
+              </Button>
               <Button
                 variant="contained"
                 onClick={handleUploadRequirements}
@@ -103,7 +124,7 @@ const Dashboard: React.FC = () => {
                 <UploadFileIcon sx={styles.iconSpacing} /> Upload Requirements
               </Button>
               <GenerateEndorsmentLetterr />
-              {role === 'Admin' && <EditCompany />}
+              {role === "Admin" && <EditCompany />}
             </>
           </Box>
           {/* Logout Button */}
@@ -126,12 +147,14 @@ const Dashboard: React.FC = () => {
               <Typography variant="h4" sx={styles.dashboardTitle}>
                 Dashboard
               </Typography>
-              <Avatar src={currentUser?.photoURL || ''} sx={styles.avatar} />
+              <Avatar src={currentUser?.photoURL || ""} sx={styles.avatar} />
             </Grid>
 
             {/* Welcome Section */}
             <Grid item xs={12}>
-              <Typography variant="h5">Welcome, {currentUser?.displayName || 'User'}</Typography>
+              <Typography variant="h5">
+                Welcome, {currentUser?.displayName || "User"}
+              </Typography>
             </Grid>
 
             {/* Tracker Progress */}
@@ -147,7 +170,7 @@ const Dashboard: React.FC = () => {
                   sx={styles.progressCircle}
                 />
                 <Box sx={styles.trackerLabels}>
-                  <Typography>Requirements: {requirementsProgress}%</Typography> 
+                  <Typography>Requirements: {requirementsProgress}%</Typography>
                   <Typography>Student Info: 22.5%</Typography>
                   <Typography>Other: 30.8%</Typography>
                   <Typography>Other: 8.1%</Typography>
@@ -180,112 +203,112 @@ const Dashboard: React.FC = () => {
 
 const styles = {
   container: {
-    display: 'flex',
-    flexDirection: 'row' as const,
-    height: '100vh',
+    display: "flex",
+    flexDirection: "row" as const,
+    height: "100vh",
   },
   sidePanel: {
-    backgroundColor: '#6DBCE1', // Light blue for the sidebar
-    padding: '20px',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
-    color: '#fff',
-    justifyContent: 'space-between', // Space between buttons and logout
+    backgroundColor: "#6DBCE1", // Light blue for the sidebar
+    padding: "20px",
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "center",
+    color: "#fff",
+    justifyContent: "space-between", // Space between buttons and logout
   },
   avatarLarge: {
     width: 80,
     height: 80,
-    marginBottom: '20px',
-    backgroundColor: '#f8f8f8',
+    marginBottom: "20px",
+    backgroundColor: "#f8f8f8",
   },
   userName: {
-    marginTop: '10px',
-    marginBottom: '30px',
-    fontSize: '18px',
-    fontWeight: 'bold',
+    marginTop: "10px",
+    marginBottom: "30px",
+    fontSize: "18px",
+    fontWeight: "bold",
   },
   sideButtonContainer: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: '20px',
-    width: '100%',
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "20px",
+    width: "100%",
   },
   sideButton: {
-    width: '100%',
-    backgroundColor: '#FFF',
-    color: '#6DBCE1',
-    textTransform: 'none' as const,
-    padding: '10px 15px',
-    borderRadius: '20px',
-    fontWeight: 'bold',
-    '&:hover': {
-      backgroundColor: '#e0f4ff',
+    width: "100%",
+    backgroundColor: "#FFF",
+    color: "#6DBCE1",
+    textTransform: "none" as const,
+    padding: "10px 15px",
+    borderRadius: "20px",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#e0f4ff",
     },
   },
   logoutContainer: {
-    marginTop: 'auto', // Push logout button to the bottom
-    width: '100%',
+    marginTop: "auto", // Push logout button to the bottom
+    width: "100%",
   },
   logoutButton: {
-    width: '100%',
-    backgroundColor: '#FFF',
-    color: '#FF5E5B', // Red for logout button
-    textTransform: 'none' as const,
-    padding: '10px 15px',
-    borderRadius: '20px',
-    fontWeight: 'bold',
-    '&:hover': {
-      backgroundColor: '#FFECEC',
+    width: "100%",
+    backgroundColor: "#FFF",
+    color: "#FF5E5B", // Red for logout button
+    textTransform: "none" as const,
+    padding: "10px 15px",
+    borderRadius: "20px",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#FFECEC",
     },
   },
   iconSpacing: {
-    marginRight: '10px',
+    marginRight: "10px",
   },
   mainContent: {
-    padding: '20px',
-    backgroundColor: '#FFDD44', // Yellow for the main section
+    padding: "20px",
+    backgroundColor: "#FFDD44", // Yellow for the main section
     flexGrow: 1,
   },
   header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px',
-    padding: '10px 20px',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
+    padding: "10px 20px",
   },
   dashboardTitle: {
     fontWeight: 500,
-    color: '#333',
+    color: "#333",
   },
   avatar: {
     width: 50,
     height: 50,
   },
   trackerProgress: {
-    padding: '20px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '20px',
-    backgroundColor: '#f5f5f5',
-    borderRadius: '8px',
+    padding: "20px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "20px",
+    backgroundColor: "#f5f5f5",
+    borderRadius: "8px",
   },
   trackerLabels: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: '5px',
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "5px",
   },
   progressCircle: {
-    color: '#FF5E5B', // Red for the circular progress
+    color: "#FF5E5B", // Red for the circular progress
   },
   toDo: {
-    padding: '20px',
-    backgroundColor: '#f5f5f5',
-    borderRadius: '8px',
+    padding: "20px",
+    backgroundColor: "#f5f5f5",
+    borderRadius: "8px",
   },
   toDoList: {
-    paddingLeft: '20px',
+    paddingLeft: "20px",
   },
 };
 

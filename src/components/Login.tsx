@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { googleSignIn } from '../services/GoogleAuth';
+import { googleSignIn } from "../services/GoogleAuth";
 
 import { auth, googleProvider } from "../firebase";
 import { signInWithPopup, UserCredential } from "firebase/auth";
@@ -23,20 +23,17 @@ const Login: React.FC = () => {
     setError(null);
     setRejected(false);
     try {
-
       const userData = await googleSignIn();
       if (userData) {
         setUser(userData);
       } else {
         setRejected(true);
-
       }
     } catch (error: any) {
       setError(error.message);
     } finally {
       setLoading(false);
     }
-
   };
 
   const loginDiv = {
@@ -46,7 +43,7 @@ const Login: React.FC = () => {
     backgroundRepeat: "no-repeat",
   };
 
-/*
+  /*
               <div>
                 <hr />
                 <p>Sign in with Institution Account</p>
@@ -76,11 +73,10 @@ const Login: React.FC = () => {
               <hr />
             </h1>
             <p>Sign in with Institution Account</p>
-            <Button variant="dark" onClick={signInWithGoogle}>
+            <Button variant="dark" onClick={handleGoogleLogin}>
               <Google /> &nbsp;&nbsp;Continue with Google
             </Button>{" "}
             <div className="pb-2" />
-
           </div>
         </Container>
       </Container>

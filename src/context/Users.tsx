@@ -13,14 +13,14 @@ const usrEmailAdd = "edward.lorica@neu.edu.ph";
 const usrPhoneNum = "(+63) 976 543 2100";
 
 export {
-    usrLastName, 
-    usrFirstName, 
-    usrMiddleInitial, 
-    usrCourse, 
-    usrJobSite,
-    userJobType,
-    usrGithubLink,
-    usrLinkedInLink,
-    usrEmailAdd,
-    usrPhoneNum
+  usrLastName,
+  usrFirstName,
+  usrMiddleInitial,
+  usrCourse,
+  usrJobSite,
+  userJobType,
+  usrGithubLink,
+  usrLinkedInLink,
+  usrEmailAdd,
+  usrPhoneNum,
 };
