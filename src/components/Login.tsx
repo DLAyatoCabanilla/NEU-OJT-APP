@@ -7,7 +7,6 @@ import { signInWithPopup, UserCredential } from "firebase/auth";
 
 import LOGO_neu from "./../assets/logo_neu.svg";
 import LoginBG from "./../assets/login_bg.jpg";
-import LoginErrorModal from "./../context/Login/Obj-LoginErrorModal";
 
 import { Container, Button, Image } from "react-bootstrap";
 import { Google } from "react-bootstrap-icons";
